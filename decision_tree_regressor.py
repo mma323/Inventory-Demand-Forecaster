@@ -2,8 +2,9 @@ from create_dataset import create_dataset, split
 from sklearn.tree import DecisionTreeRegressor
 import pandas as pd
 import matplotlib.pyplot as plt
+import random as rdm   
 
-def train_regression_tree(dataset : tuple):
+def train_regression_tree(dataset : tuple = None):
     """
         Trains a regression tree using the dataset provided.
 
@@ -25,6 +26,23 @@ def train_regression_tree(dataset : tuple):
         regressor : DecisionTreeRegressor
             Trained regression tree.
         """
+    if dataset is None:
+        #random parameters
+        regressor = DecisionTreeRegressor(
+            random_state=0,
+            criterion=rdm.choice(["poisson", "squared_error", "friedman_mse", "absolute_error"]),
+            splitter=rdm.choice(["best", "random"]),
+            max_depth=rdm.randint(1, 10),
+            min_samples_split=rdm.randint(2, 10),
+            min_samples_leaf=rdm.randint(1, 10),
+            min_weight_fraction_leaf=rdm.random()*0.5,
+            max_features=rdm.choice(["auto", "sqrt", "log2"]),
+            max_leaf_nodes=rdm.randint(2, 10),
+            min_impurity_decrease=rdm.random(),
+            ccp_alpha=rdm.random()
+        )
+        return regressor
+    
     data_points, expected_outputs, time = dataset
     regressor = DecisionTreeRegressor(random_state=0)
     regressor.fit(data_points, expected_outputs)
