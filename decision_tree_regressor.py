@@ -72,16 +72,14 @@ def main():
     plt.plot(
         testing_data["Date"].iloc[window_size:], 
         predictions, 
-        label="Predictions"
+        label="Decision tree predictions",
     )
     plt.plot(
         testing_data["Date"].iloc[window_size:], 
         testing_data["Demand"].iloc[window_size:], 
-        label="Original data"
+        label="Original data",
+        linewidth=3
     )
     plt.legend()
-    plt.show()
 
-
-if __name__ == "__main__":
-    main()
+main()
