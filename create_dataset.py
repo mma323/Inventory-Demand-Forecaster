@@ -44,9 +44,10 @@ def split(data : pd.DataFrame, training_fraction : float) -> tuple:
         """
     split_index = int(len(data) * training_fraction)
     training_data = data[:split_index]
-    testing_data = data[split_index:]
-
+    testing_data = data[split_index:].reset_index(drop=True)
     return training_data, testing_data
+
+
 
 
 def create_dataset(
@@ -103,11 +104,11 @@ def main():
     plot_data(file, data_column, time_column)
 
     data_frame = pd.read_csv(file)
+    #shuffle data
     training_data, testing_data = split(data_frame, 0.8)
-    training_dataset = create_dataset(
-        training_data, time_column, data_column, window_size
-    )
-    print(training_dataset)
+   
+    print(testing_data)
+
 
 
 if __name__ == "__main__":

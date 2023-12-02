@@ -27,7 +27,6 @@ def train_regression_tree(dataset : tuple = None):
             Trained regression tree.
         """
     if dataset is None:
-        #random parameters
         regressor = DecisionTreeRegressor(
             random_state=0,
             criterion=rdm.choice(["poisson", "squared_error", "friedman_mse", "absolute_error"]),
