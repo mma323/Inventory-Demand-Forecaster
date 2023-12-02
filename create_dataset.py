@@ -104,10 +104,10 @@ def main():
 
     data_frame = pd.read_csv(file)
     training_data, testing_data = split(data_frame, 0.8)
-    training_dataset = create_dataset(training_data, time_column, data_column, window_size)
-    
+    training_dataset = create_dataset(
+        training_data, time_column, data_column, window_size
+    )
     print(training_dataset)
-
 
 
 if __name__ == "__main__":

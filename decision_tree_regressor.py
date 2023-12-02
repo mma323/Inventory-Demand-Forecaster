@@ -36,24 +36,31 @@ def main():
     window_size = 5
     data = pd.read_csv("data_2022.csv")
     training_data, testing_data = split(data, 0.8)
-    training_dataset = create_dataset(training_data, "Date", "Demand", window_size)
+    training_dataset = create_dataset(
+        training_data, "Date", "Demand", window_size
+    )
     regressor = train_regression_tree(training_dataset)
 
     
-    #Using the same sliding window approach as in (2.a), start from 01.01.2022 and use the
-    #regression tree to predict the next value. Save each prediction in a list.
-    
+    #Using the same sliding window approach as in (2.a), start from 01.01.2022 
+    #and use the regression tree to predict the next value. Save each 
+    #prediction in a list.
     predictions = []
     for i in range(len(testing_data) - window_size):
         data_points = testing_data["Demand"].iloc[i:i + window_size].values
         predictions.append(regressor.predict([data_points]))
 
-
     #Use matplotlib to plot the results alongside the original data.
-    #you have to offset the predictions by 30 days, since you are predicting the next value
-    #after the sliding window.
-    plt.plot(testing_data["Date"].iloc[window_size:], predictions, label="Predictions")
-    plt.plot(testing_data["Date"].iloc[window_size:], testing_data["Demand"].iloc[window_size:], label="Original data")
+    plt.plot(
+        testing_data["Date"].iloc[window_size:], 
+        predictions, 
+        label="Predictions"
+    )
+    plt.plot(
+        testing_data["Date"].iloc[window_size:], 
+        testing_data["Demand"].iloc[window_size:], 
+        label="Original data"
+    )
     plt.legend()
     plt.show()
 
