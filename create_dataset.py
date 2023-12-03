@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 def plot_data(csv_path : str, data_column : str, time_column : str) -> None:
     """
-        Plots the data from a csv file to see what it looks like in order to 
-        determine window size for sliding window.
+        Plots the data from a csv file to see what it looks like in order for 
+        the developer to determine window size for sliding window.
 
         Parameters
         ----------
@@ -37,17 +37,17 @@ def split(data : pd.DataFrame, training_fraction : float) -> tuple:
 
         Returns
         -------
-        training_data : pd.DataFrame
-            Training data.
-        testing_data : pd.DataFrame
-            Testing data.
+        tuple
+            training_data : pd.DataFrame
+                Training data.
+            testing_data : pd.DataFrame
+                Testing data.
         """
     split_index = int(len(data) * training_fraction)
     training_data = data[:split_index]
     testing_data = data[split_index:].reset_index(drop=True)
+
     return training_data, testing_data
-
-
 
 
 def create_dataset(
@@ -82,9 +82,7 @@ def create_dataset(
             time : list
                 List containing the time values for each data point.
         """
-    data_points = []
-    expected_outputs = []
-    time = []
+    data_points, expected_outputs, time = [], [], []
 
     for i in range(len(data) - window_size):
         data_points.append(data[data_column][i:i + window_size].values)
@@ -92,24 +90,3 @@ def create_dataset(
         time.append(data[time_column][i + window_size])
 
     return data_points, expected_outputs, time
-
-
-def main():
-    #For testing purposes
-    file = "data_2022.csv"
-    data_column = "Demand"
-    time_column = "Date"
-    window_size = 30
-
-    plot_data(file, data_column, time_column)
-
-    data_frame = pd.read_csv(file)
-    #shuffle data
-    training_data, testing_data = split(data_frame, 0.8)
-   
-    print(testing_data)
-
-
-
-if __name__ == "__main__":
-    main()
