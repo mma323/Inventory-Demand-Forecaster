@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import random as rdm   
 
 
-def train_regression_tree(dataset : tuple = None):
+def train_regression_tree(dataset : tuple = None) -> DecisionTreeRegressor:
     """
         Trains a regression tree using the dataset provided.
 
@@ -55,10 +55,13 @@ def train_regression_tree(dataset : tuple = None):
 def main():
     window_size = 5
     data = pd.read_csv("data_2022.csv")
+
     training_data, testing_data = split(data, 0.8)
+
     training_dataset = create_dataset(
         training_data, "Date", "Demand", window_size
     )
+
     regressor = train_regression_tree(training_dataset)
 
     predictions = []
