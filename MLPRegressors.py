@@ -5,14 +5,10 @@ import matplotlib.pyplot as plt
 import random as rdm
 
 def create_ensemble_of_mlp_regressors(number_of_mlp_regressors):
-    ensemble = []
-    for i in range(number_of_mlp_regressors):
-        regressor = MLPRegressor()
-        ensemble.append(regressor)
+    ensemble = [ MLPRegressor() for i in range(number_of_mlp_regressors) ]
     return ensemble
     
 
-#Train the ensemble using bagging (comment)
 def train_ensemble(ensemble, training_dataset):
     data_points, expected_outputs, time = training_dataset
     for regressor in ensemble:
