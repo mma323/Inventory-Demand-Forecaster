@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random as rdm   
 
+
 def train_regression_tree(dataset : tuple = None):
     """
         Trains a regression tree using the dataset provided.
@@ -29,7 +30,9 @@ def train_regression_tree(dataset : tuple = None):
     if dataset is None:
         regressor = DecisionTreeRegressor(
             random_state=0,
-            criterion=rdm.choice(["poisson", "squared_error", "friedman_mse", "absolute_error"]),
+            criterion=rdm.choice(
+                ["poisson", "squared_error", "friedman_mse", "absolute_error"]
+            ),
             splitter=rdm.choice(["best", "random"]),
             max_depth=rdm.randint(1, 10),
             min_samples_split=rdm.randint(2, 10),
@@ -58,16 +61,11 @@ def main():
     )
     regressor = train_regression_tree(training_dataset)
 
-    
-    #Using the same sliding window approach as in (2.a), start from 01.01.2022 
-    #and use the regression tree to predict the next value. Save each 
-    #prediction in a list.
     predictions = []
     for i in range(len(testing_data) - window_size):
         data_points = testing_data["Demand"].iloc[i:i + window_size].values
         predictions.append(regressor.predict([data_points]))
 
-    #Use matplotlib to plot the results alongside the original data.
     plt.plot(
         testing_data["Date"].iloc[window_size:], 
         predictions, 
