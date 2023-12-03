@@ -4,45 +4,36 @@ import random_forest
 import MLPRegressors
 import matplotlib.pyplot as plt
 import pandas as pd
-
+from create_dataset import plot_data, create_dataset
 
 def main():
     plt.show()
 
-    window_size = 5
-    data = pd.read_csv("data_2023.csv")
-    training_data, testing_data = create_dataset.split(data, 0.8)
+    data_2023 = pd.read_csv("data_2023.csv")
+    data_2023 = create_dataset(data_2023, "Date", "Demand", 5)
 
-    training_dataset = create_dataset.create_dataset(
-        training_data, "Date", "Demand", window_size
-    )
-    testing_dataset = create_dataset.create_dataset(
-        testing_data, "Date", "Demand", window_size
-    )
 
-    # The 2023 data is missing the values after 25.08.2023.
-    # Use MLP regressor ensemble to predict the missing values from
-    # 26.08.2023 to 31.12.2023, save the predictions in a list.
+    # The data from 2023 is missing values for all days after 25.08.2023    
+    # Generate list of dates from 26.08.2023 to 31.12.2023 in the format dd.mm.yyyy
+    # using pandas date_range function
+    dates = pd.date_range(start="2023-08-26", end="2023-12-31").strftime("%d.%m.%Y").tolist()
 
-    # Create ensemble of MLP regressors
+
+    # Predict the demand for the missing days using an ensemble of MLP regressors
     ensemble = MLPRegressors.create_ensemble_of_mlp_regressors(10)
-    # Train ensemble
-    ensemble = MLPRegressors.train_ensemble(ensemble, training_dataset)
-
-    # Generate dates from 26.08.2023 to 31.12.2023
-    start_date = pd.to_datetime("2023-08-26")
-    end_date = pd.to_datetime("2023-12-31")
-    date_range = pd.date_range(start_date, end_date)
-
-    # Predict values for each date in the range
+    ensemble = MLPRegressors.train_ensemble(ensemble, data_2023)
     predictions = []
-    for date in date_range:
-        data_points = testing_dataset[testing_dataset["Date"] <= date]["Demand"].tail(window_size).values
-        prediction = MLPRegressors.predict_ensemble(ensemble, data_points)
-        predictions.append(prediction)
-
-    print(len(predictions))
-
+    for i in range(len(dates)):
+        data_points = data_2023[0][i]
+        predictions.append(MLPRegressors.predict_ensemble(ensemble, data_points))
+    
+    plt.plot(
+        dates, 
+        predictions, 
+        label="MLP predictions"
+    )
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":
